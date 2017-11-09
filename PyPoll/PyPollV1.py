@@ -42,7 +42,7 @@ Winner: Gomez
 
 ''' purpose of this code is to calculate voting data and notfiy the user which candidates got which votes and what portions of the votes.'''
 
-
+doc = open("voting_results.txt","w")
 data_1 = os.path.join("Data","election_data_2.csv")
 total_votes = 0
 region = []
@@ -55,6 +55,11 @@ with open(data_1, 'r') as csv_file:
          break
         else:
             total_votes += 1
+doc.write("\n")
+doc.write("Election Results")
+doc.write("----------------------------------")
+doc.write ('Total votes: ' + str(total_votes))
+doc.write("----------------------------------")
 print("\n")
 print("Election Results")
 print("----------------------------------")
@@ -73,8 +78,11 @@ with open(data_1, 'r') as csv_file:
     vote_percentage = 0         
     for key, value in county_dict.items():
         vote_percentage = round((value)/(total_votes)*100,2)
-        
+        doc.write(key + ": " + str(vote_percentage)+"% " + " (" + str(value) + ")")
         print(key + ": " + str(vote_percentage)+"% " + " (" + str(value) + ")")
+doc.write("----------------------------------")
 print("----------------------------------")
 winner = max(county_dict, key=county_dict.get)
-print("Your winner is "+ winner + "\n")
+doc.write("Your winner is: "+ winner + "\n")
+print("Your winner is: "+ winner + "\n")
+doc.close()
