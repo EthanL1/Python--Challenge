@@ -1,6 +1,8 @@
 import os
 import csv
 import decimal
+import numpy as np
+from numpy import genfromtxt
 """
 ## Option 2: PyPoll
 
@@ -53,36 +55,26 @@ with open(data_1, 'r') as csv_file:
          break
         else:
             total_votes += 1
+print("\n")
+print("Election Results")
+print("----------------------------------")
 print ('Total votes: ' + str(total_votes))
-marsh_votes = 0
-queen_votes = 0
-bamoo_votes = 0 
-trandee_votes = 0
+print("----------------------------------")
+
+county_dict= {}
 with open(data_1, 'r') as csv_file:
     dataFile =  csv.reader(csv_file, delimiter=',')
-
+    next(dataFile, None)
     for row in dataFile:
-        if row[1] == "Marsh":
-            marsh_votes +=1
-        elif row[1] == "Queen":
-            queen_votes +=1
-        elif row[1] == "Bamoo":
-            bamoo_votes +=1    
+        if row[2]   not in county_dict:
+            county_dict[row[2]] = 1
         else:
-            trandee_votes += 1
-    print(marsh_votes)
-    print(queen_votes)
-    print(bamoo_votes) 
-    print(trandee_votes)
-
-marsh_percentage = ((marsh_votes/total_votes)*100)
-queen_percentage = ((queen_votes/total_votes)*100)
-bamoo_percentage = ((bamoo_votes/total_votes)*100)
-trandee_percentage = ((trandee_votes/total_votes)*100)
-
-print("-----------")
-print("total number of votes is: " + str(total_votes) )
-print("---------")
-print("Marsh: " + str(round(marsh_percentage,2))+"%     "+ "("+ str(marsh_votes)+")")
-
-if marsh_percentage > queen_percentage and marsh_percentage > bamoo_percentage and marsh_percentage > trandee_percentage
+            county_dict[row[2]] =  county_dict[row[2]] + 1 
+    vote_percentage = 0         
+    for key, value in county_dict.items():
+        vote_percentage = round((value)/(total_votes)*100,2)
+        
+        print(key + ": " + str(vote_percentage)+"% " + " (" + str(value) + ")")
+print("----------------------------------")
+winner = max(county_dict, key=county_dict.get)
+print("Your winner is "+ winner + "\n")
